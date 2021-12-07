@@ -10,3 +10,5 @@ structopt = { version = "0.3", default-features = false }
 tokio = { version = "1", features = ["full"] }
 day01 = {path = "../day01"}
 day02 = {path = "../day02"}
+num_enum = "0.5.4"
+

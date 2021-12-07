@@ -8,8 +8,8 @@ pub async fn run(part: usize) -> usize {
     let input = DayInput::new(d, p).await;
 
     match part {
-        1 => part_1(input).await,
-        2 => part_2(input).await,
+        1 => part_generic(input, &Point::process_no_aim).await,
+        2 => part_generic(input, &Point::process_with_aim).await,
         _ => 0,
     }
 }
@@ -100,7 +100,7 @@ impl Point {
     }
 }
 
-async fn part_1(input: DayInput) -> usize {
+async fn part_generic(input: DayInput, fx: &dyn Fn(&Point, Command) -> Point) -> usize {
     let linestream = FramedRead::new(input.reader, LinesCodec::new());
 
     let tmp = linestream
@@ -109,23 +109,7 @@ async fn part_1(input: DayInput) -> usize {
             Command::from_str(&l).unwrap()
         })
         .fold(Point::default(), |point, command| async move {
-            Point::process_no_aim(&point, command)
-        })
-        .await;
-
-    (tmp.x * tmp.depth).try_into().unwrap()
-}
-
-async fn part_2(input: DayInput) -> usize {
-    let linestream = FramedRead::new(input.reader, LinesCodec::new());
-
-    let tmp = linestream
-        .map(|line| {
-            let l = line.unwrap();
-            Command::from_str(&l).unwrap()
-        })
-        .fold(Point::default(), |point, command| async move {
-            Point::process_with_aim(&point, command)
+            fx(&point, command)
         })
         .await;
 
