@@ -2,7 +2,7 @@ use core::panic;
 
 use structopt::StructOpt;
 
-const DAYS_INPUT: [&str; 2] = ["1", "2"];
+const DAYS_INPUT: [&str; 3] = ["1", "2", "3"];
 const PART_INPUT: [&str; 2] = ["1", "2"];
 
 #[derive(StructOpt, Debug)]
